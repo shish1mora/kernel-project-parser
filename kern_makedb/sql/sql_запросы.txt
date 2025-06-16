@@ -1,0 +1,45 @@
+
+#хеш для примера (имеет два fixes_hash и 1 upstream)
+
+8c90d431c166df969e6ab6620723586f3bf13729
+
+
+#вывод всех fixes_hash
+
+SELECT DISTINCT kf.fixes_hash
+FROM public."KERNEL_FIXES" kf
+WHERE kf.kern_hash = '8c90d431c166df969e6ab6620723586f3bf13729';
+
+
+#поиск всех записей связанных с kern_hash
+
+SELECT km.*, kf.fixes_hash
+FROM public."KERNEL_MAIN" km
+LEFT JOIN public."KERNEL_FIXES" kf ON km.kern_hash = kf.kern_hash
+WHERE km.kern_hash = '8c90d431c166df969e6ab6620723586f3bf13729';
+
+
+
+#поиск всей информации в обеих таблицах по заданному kern_hash
+
+SELECT
+    km.kern_hash,
+    km.upstream_hash,
+    km.kern_ver,
+    km.message,
+    km.ro_created_at,
+    kf.fixes_hash
+FROM
+    public."KERNEL_MAIN" km
+LEFT JOIN
+    public."KERNEL_FIXES" kf
+ON
+    km.kern_hash = kf.kern_hash
+WHERE
+    km.kern_hash = '8c90d431c166df969e6ab6620723586f3bf13729';
+
+
+#стандартный запрос поиска по хешу
+
+SELECT * FROM "KERNEL_MAIN" WHERE kern_hash = '900b444be493b7f404898c785d6605b177a093d0'
+
